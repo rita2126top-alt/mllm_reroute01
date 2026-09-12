@@ -1,0 +1,4 @@
+# Runtime artifacts only. Original experiments/.gitkeep is preserved.
+*
+!.gitignore
+!.gitkeep
