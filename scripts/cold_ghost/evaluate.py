@@ -10,6 +10,7 @@ isolate_script_directory(__file__)
 
 from cold_ghost.config import ABLATIONS, load_experiment, resolve_tasks
 from cold_ghost.evaluation import new_output_dir, run_evaluation, write_json
+from cold_ghost.judge import mmbench_failure_logging
 
 
 def main(argv=None):
@@ -42,11 +43,12 @@ def main(argv=None):
     output = new_output_dir(args.out)
     write_json(output / "run.json", metadata)
     try:
-        results = run_evaluation(spec.config_name, tasks=args.tasks, checkpoint=args.checkpoint,
-                                 ablation=args.ablation, limit=args.limit)
-        if not isinstance(results, dict) or not results.get("results"):
-            raise RuntimeError("Evaluation returned no benchmark results")
-        write_json(output / "results.json", results)
+        with mmbench_failure_logging(metadata["tasks"]):
+            results = run_evaluation(spec.config_name, tasks=args.tasks, checkpoint=args.checkpoint,
+                                     ablation=args.ablation, limit=args.limit)
+            if not isinstance(results, dict) or not results.get("results"):
+                raise RuntimeError("Evaluation returned no benchmark results")
+            write_json(output / "results.json", results)
     except Exception as exc:
         write_json(output / "failure.json", {"type": type(exc).__name__, "message": str(exc)})
         raise

@@ -1,5 +1,7 @@
 # MLLM-Reroute + Cold/Ghost：远程服务器 Conda 从零运行指南
 
+完整正式训练、全部评测、全部诊断与可恢复总脚本请使用 [全量运行指南](COLD_GHOST_全量运行指南.md)。本页保留原安装与分步排错资料。
+
 仓库：https://github.com/rita2126top-alt/mllm_reroute01
 
 本文固定使用 **Linux x86_64、Bash、单张 NVIDIA GPU、Conda、Python 3.10**。代码交付时没有访问你的远程 GPU，也没有训练好的 Ghost 权重；权重由本文的两阶段训练流程生成。
